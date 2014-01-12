@@ -1,1 +1,1 @@
-module List = OmlEnum.List
+module List = OmlEnum.FunctorList(OmlEnum.OmlList)

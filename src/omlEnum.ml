@@ -175,4 +175,3 @@ struct
   include OMLComp
 end
 
-module List = FunctorList(OmlList)
