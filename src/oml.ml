@@ -9,3 +9,8 @@ let switch (a, b) = b, a
 module List = OmlEnum.FunctorList(OmlEnum.OmlList)
 module Array = OmlEnum.FunctorArray(OmlEnum.OmlArray)
 module String = OmlEnum.OmlString
+
+let _ =
+  if !Sys.interactive
+  then OmlIntro.display_intro () 
+  
