@@ -276,6 +276,68 @@ module OmlArray = struct
 
 end
 
+(**
+   Représentation des chaines de caractères
+   Note : ce code présente une redondance mais il 
+   n'est pas comptabile avec le type ENUM (qui prend 
+   en argument un type polymorphe)
+**)
+module OmlString : sig
+
+  val make : int -> char -> string
+  val copy : string -> string
+  val init : int -> (int -> char) -> string
+  val reverse : string -> string
+  val of_array : char array -> string 
+  val of_list : char list -> string
+  val to_list : string -> char list
+  val to_array : string -> char array
+  val each : (char -> unit) -> string -> unit
+  val each_with_index : (int -> char -> unit) -> string -> unit
+  val map : (char -> char) -> string -> string
+  val fold_left : ('a -> char -> 'a) -> 'a -> string -> 'a
+
+end = struct
+
+  let make = String.make
+  let copy = String.copy
+
+  let init i f = 
+    let s = String.create i in 
+    for i = 0 to (i - 1) do
+      s.[i] <- f i
+    done;
+    s
+
+  let reverse s = 
+    let len = String.length s in 
+    init len (fun x -> s.[len - x - 1])
+
+  let of_array a = init (Array.length a) (fun x -> a.(x))
+  let of_list l = 
+    let s = String.create (List.length l) in 
+    let rec ol i = function 
+      | [] -> s
+      | x :: xs -> 
+	s.[i] <- x;
+	ol (i + 1) xs 
+    in ol 0 l
+
+  let to_list = OmlList.of_string
+  let to_array = OmlArray.of_string
+  let each = String.iter
+  let each_with_index = String.iteri
+  let map = String.map 
+
+  let fold_left f a s = 
+    let len = String.length s in 
+    let rec foldl acc = function 
+      | x when x = len -> acc 
+      | x -> foldl (f acc s.[x]) (x+1)
+    in foldl a 0
+
+end
+
 (** Création d'un foncteur pour désabstraire le type t**)
 module FunctorList (OMLComp : ENUM with type 'a t = 'a list) =
 struct
@@ -288,4 +350,3 @@ struct
   include Array
   include OMLComp
 end
-
