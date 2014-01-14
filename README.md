@@ -9,7 +9,6 @@ L'objectif ce cette bibliothèque n'est pas de fourni à la solution absolue à 
 Une fois le dépôt clôné, vous disposez d'un Makefile. 
 
 *    `make` (ou `make all`) : construit le fichier `.cma` et un toplevel qui charge la bibliothèque OML.
-
 *    `make oml` : construit les modules d'OML, de manière séparée. 
 
 ##Utilisation 
@@ -19,6 +18,9 @@ Vous pouvez (une fois la commande `make` effectuée) utiliser le toplevel d'OML.
 
 ###Compilation d'un fichier avec OML
 Il suffit de compiler le fichier en chargant la bibliothèque `oml.cma` (se référer aux documentations relatives à la compilation).
+
+###Etendre les fonctionnalités
+Pour étendre les modules de CaML (et charger les modules complémentaires) il suffit de faire `open Oml` et l'espace nom `Oml.etc` est tué.
 
 ##Documentation 
 
