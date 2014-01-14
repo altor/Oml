@@ -284,9 +284,13 @@ end
 **)
 module OmlString : sig
 
+
+  val neutral : string
   val make : int -> char -> string
   val copy : string -> string
   val init : int -> (int -> char) -> string
+  val append : string -> char -> string
+  val prepend : char -> string -> string
   val reverse : string -> string
   val of_array : char array -> string 
   val of_list : char list -> string
@@ -296,9 +300,23 @@ module OmlString : sig
   val each_with_index : (int -> char -> unit) -> string -> unit
   val map : (char -> char) -> string -> string
   val fold_left : ('a -> char -> 'a) -> 'a -> string -> 'a
+  val fold_right : (char -> 'a -> 'a) -> string -> 'a -> 'a
+  val filter : (char -> bool) -> string -> string
+  val all : (char -> bool) -> string -> bool
+  val any : (char -> bool) -> string -> bool
+  val elem : char -> string -> bool
+  val head : string -> char 
+  val last : string -> char
+  val tail : string -> string 
+  val firsts : string -> string
+  val at : string -> int -> char 
+  val set : string -> int -> char -> string
+  val return : char -> string
+  val bind : string -> (char -> char) -> string
 
 end = struct
 
+  let neutral = ""
   let make = String.make
   let copy = String.copy
 
@@ -312,6 +330,9 @@ end = struct
   let reverse s = 
     let len = String.length s in 
     init len (fun x -> s.[len - x - 1])
+
+  let append = Printf.sprintf "%s%c"
+  let prepend = Printf.sprintf "%c%s" 
 
   let of_array a = init (Array.length a) (fun x -> a.(x))
   let of_list l = 
@@ -336,6 +357,63 @@ end = struct
       | x -> foldl (f acc s.[x]) (x+1)
     in foldl a 0
 
+  let fold_right f s a = 
+    let len = String.length s in 
+    let rec foldr acc = function 
+      | -1 -> acc
+      | x -> foldr (f s.[x] acc) (x-1)
+    in foldr a (len - 1)
+
+  let filter f s = 
+    let rec filter acc = function 
+      | x when (String.length s) = x -> acc
+      | x -> filter (append acc s.[x]) (x + 1)
+    in filter neutral 0 
+
+  let all f s = 
+    let rec all = function 
+      | x when x = (String.length s) -> true
+      | x when f s.[x] -> all (x + 1)
+      | _ -> false
+    in all 0
+
+  let any f s = 
+    let rec any = function 
+      | x when x = (String.length s) -> false
+      | x when f s.[x] -> true
+      | x -> any (x + 1)
+    in any 0
+
+  let elem c = any (fun x -> x = c)
+
+  let head s = 
+    if (String.length s) = 0 then raise (Failure "head")
+    else s.[0]
+
+  let last s = 
+    let len = String.length s in
+    if len = 0 then raise (Failure "last")
+    else s.[len - 1]
+
+  let tail s = 
+    let len = String.length s in
+    if len = 0 then raise (Failure "tail")
+    else String.sub s 1 (len - 1)
+ 
+  let firsts s = 
+    let len = String.length s in
+    if len = 0 then raise (Failure "firsts")
+    else String.sub s 0 (len - 1)
+
+  let at s x = s.[x]
+  let set s x v = 
+    let ns = copy s in 
+    ns.[x] <- v;
+    ns
+
+  let return x = append neutral x
+  let bind s f = map f s
+ 
 end
 
 (** Création d'un foncteur pour désabstraire le type t**)
