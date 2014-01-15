@@ -6,9 +6,12 @@ omlIntro :
 omlEnum : omlIntro
 	ocamlc -o omlEnum.cmo -c src/omlEnum.ml 
 
-oml : omlEnum 
-	ocamlc -o oml.cmo -I src/ -c omlIntro.cmo omlEnum.cmo src/oml.ml
-	ocamlc -o oml.cma -I src/ -a omlIntro.cmo omlEnum.cmo oml.cmo
+omlPrimitive : omlEnum
+	ocamlc -o omlPrimitive.cmo -c src/omlPrimitive.ml 
+
+oml : omlPrimitive
+	ocamlc -o oml.cmo -I src/ -c omlIntro.cmo omlEnum.cmo omlPrimitive.cmo src/oml.ml
+	ocamlc -o oml.cma -I src/ -a omlIntro.cmo omlEnum.cmo omlPrimitive.cmo oml.cmo
 
 ocamloml : oml
 	ocamlmktop -custom -o ocamloml oml.cma
