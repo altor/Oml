@@ -284,7 +284,6 @@ end
 **)
 module OmlString : sig
 
-
   val neutral : string
   val make : int -> char -> string
   val copy : string -> string
@@ -294,6 +293,14 @@ module OmlString : sig
   val reverse : string -> string
   val of_array : char array -> string 
   val of_list : char list -> string
+  val of_int : int -> string
+  val of_float : float -> string
+  val of_bool : bool -> string
+  val of_char : char -> string
+  val to_int : string -> int
+  val to_float : string -> float
+  val to_bool : string -> bool
+  val to_char : string -> char
   val to_list : string -> char list
   val to_array : string -> char array
   val each : (char -> unit) -> string -> unit
@@ -332,7 +339,18 @@ end = struct
     init len (fun x -> s.[len - x - 1])
 
   let append = Printf.sprintf "%s%c"
-  let prepend = Printf.sprintf "%c%s" 
+  let prepend = Printf.sprintf "%c%s"
+  let return x = append neutral x 
+
+  let of_int = string_of_int
+  let of_float = string_of_float
+  let of_bool = string_of_bool
+  let of_char  = return 
+
+  let to_int = int_of_string
+  let to_float = float_of_string
+  let to_bool = bool_of_string
+  let to_char s = s.[0]
 
   let of_array a = init (Array.length a) (fun x -> a.(x))
   let of_list l = 
@@ -411,7 +429,6 @@ end = struct
     ns.[x] <- v;
     ns
 
-  let return x = append neutral x
   let bind s f = map f s
  
 end

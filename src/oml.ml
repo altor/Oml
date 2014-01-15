@@ -9,6 +9,9 @@ let switch (a, b) = b, a
 module List = OmlEnum.FunctorList(OmlEnum.OmlList)
 module Array = OmlEnum.FunctorArray(OmlEnum.OmlArray)
 module String = OmlEnum.OmlString
+module Bool = OmlPrimitive.OmlBool
+module Int = OmlPrimitive.OmlInt
+module Float = OmlPrimitive.OmlFloat
 
 let _ =
   if !Sys.interactive

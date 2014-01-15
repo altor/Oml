@@ -39,6 +39,11 @@ Ce module propose des fonctionnalités en plus au module `String` de OCaML.
      Renvoi l'image du booléen en chaine de caractères.
 
 
+*    **Oml.String.of_char**  
+     `char -> string`  
+     Renvoi l'image du caractère en chaine de caractères.
+
+
 *    **Oml.String.of_list**  
      `char list -> string`  
      Renvoi l'image de la liste de caractères en chaine de caractères.
@@ -57,6 +62,11 @@ Ce module propose des fonctionnalités en plus au module `String` de OCaML.
 *    **Oml.String.to_bool**  
      `string -> bool`  
      Renvoi l'image de la chaine de caractères en booléen.
+
+
+*    **Oml.String.to_char**  
+     `string -> char`  
+     Renvoi l'image de la chaine de caractères en caractère.
 
 
 *    **Oml.String.to_list**  
