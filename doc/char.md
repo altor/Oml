@@ -4,12 +4,12 @@ Ce module décrit les opérations primitives sur les caractères. Il étend le m
 ##Fonctions du modules
 
 
-*    **Oml.List.of_int**  
+*    **Oml.Char.of_int**  
      `int -> char`  
      Renvoi l'image caractère d'un entier.
 
 
-*    **Oml.List.of_int_value**  
+*    **Oml.Char.of_int_value**  
      `int -> char`  
      Renvoi l'entier convertit en caractère (en conservant sa valeur).  
      Par exemple, `5` donnera `'5'`.
@@ -39,7 +39,7 @@ Ce module décrit les opérations primitives sur les caractères. Il étend le m
      Renvoi l'image entière d'un caractère.
 
 
-*    **Oml.List.to_int_value**  
+*    **Oml.Char.to_int_value**  
      `char -> int`  
      Renvoi l'image caractère d'un entier (en conservant sa valeur).
 
