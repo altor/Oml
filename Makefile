@@ -12,8 +12,7 @@ oml : omlEnum
 
 ocamloml : oml
 	ocamlmktop -custom -o ocamloml oml.cma
-	rm *.cmo
-	rm *cmi 
+
 
 clean : 
 	rm *.cm*
