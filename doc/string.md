@@ -23,9 +23,41 @@ Ce module propose des fonctionnalités en plus au module `String` de OCaML.
      `char array -> string`  
      Renvoi l'image du tableau de caractères en chaine de caractères.
 
+
+*    **Oml.String.of_int**  
+     `int -> string`  
+     Renvoi l'image de l'entier en chaine de caractères.
+
+
+*    **Oml.String.of_float**  
+     `float -> string`  
+     Renvoi l'image du float en chaine de caractères.
+
+
+*    **Oml.String.of_bool**  
+     `bool -> string`  
+     Renvoi l'image du booléen en chaine de caractères.
+
+
 *    **Oml.String.of_list**  
      `char list -> string`  
      Renvoi l'image de la liste de caractères en chaine de caractères.
+
+
+*    **Oml.String.to_int**  
+     `string -> int`  
+     Renvoi l'image de la chaine de caractères en entier.
+
+
+*    **Oml.String.to_float**  
+     `string -> float`  
+     Renvoi l'image de la chaine de caractères en float.
+
+
+*    **Oml.String.to_bool**  
+     `string -> bool`  
+     Renvoi l'image de la chaine de caractères en booléen.
+
 
 *    **Oml.String.to_list**  
      `string -> char list`  
