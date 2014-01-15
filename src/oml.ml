@@ -6,12 +6,13 @@ let ( @@ ) f x = f x
 let switch (a, b) = b, a
 
 (** Inclusion des modules dans Oml **)
-module List = OmlEnum.FunctorList(OmlEnum.OmlList)
-module Array = OmlEnum.FunctorArray(OmlEnum.OmlArray)
+module List = OmlEnum.OmlList
+module Array = OmlEnum.OmlArray
 module String = OmlEnum.OmlString
 module Bool = OmlPrimitive.OmlBool
 module Int = OmlPrimitive.OmlInt
 module Float = OmlPrimitive.OmlFloat
+module Char = OmlPrimitive.OmlChar
 
 let _ =
   if !Sys.interactive

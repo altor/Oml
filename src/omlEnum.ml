@@ -59,7 +59,7 @@ end
 
 (** Déscription des liste **)
 
-module OmlList = struct
+module OmlList : ENUM with type 'a t = 'a list = struct
   type 'a t = 'a list
 
   let neutral = []
@@ -152,7 +152,7 @@ end
 
 
 (** Déscription des tableaux  **)
-module OmlArray = struct
+module OmlArray : ENUM with type 'a t = 'a array = struct
   type 'a t = 'a array
 
   let neutral = [||]
@@ -431,17 +431,4 @@ end = struct
 
   let bind s f = map f s
  
-end
-
-(** Création d'un foncteur pour désabstraire le type t**)
-module FunctorList (OMLComp : ENUM with type 'a t = 'a list) =
-struct
-  include List
-  include OMLComp
-end
-
-module FunctorArray (OMLComp : ENUM with type 'a t = 'a array) =
-struct
-  include Array
-  include OMLComp
 end
