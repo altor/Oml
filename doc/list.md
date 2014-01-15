@@ -4,7 +4,7 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
 ##Fonctions ajoutées
 
 *    **Oml.List.init**  
-     `init -> (int -> 'a) -> 'a list`  
+     `int -> (int -> 'a) -> 'a list`  
      Construit une liste en appliquant la fonction passée en argument à chaque indice.
 
 
