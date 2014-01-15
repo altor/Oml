@@ -59,7 +59,7 @@ end
 
 (** Déscription des liste **)
 
-module OmlList : ENUM with type 'a t = 'a list = struct
+module OmlListF : ENUM with type 'a t = 'a list = struct
   type 'a t = 'a list
 
   let neutral = []
@@ -152,7 +152,7 @@ end
 
 
 (** Déscription des tableaux  **)
-module OmlArray : ENUM with type 'a t = 'a array = struct
+module OmlArrayF : ENUM with type 'a t = 'a array = struct
   type 'a t = 'a array
 
   let neutral = [||]
@@ -211,7 +211,7 @@ module OmlArray : ENUM with type 'a t = 'a array = struct
     let rec tl acc = function 
       | -1 -> acc 
       | x -> tl (a.(x) :: acc) (x - 1) 
-    in tl OmlList.neutral (Array.length a - 1)
+    in tl OmlListF.neutral (Array.length a - 1)
 
   let each = Array.iter
   let each_with_index = Array.iteri
@@ -362,8 +362,8 @@ end = struct
 	ol (i + 1) xs 
     in ol 0 l
 
-  let to_list = OmlList.of_string
-  let to_array = OmlArray.of_string
+  let to_list = OmlListF.of_string
+  let to_array = OmlArrayF.of_string
   let each = String.iter
   let each_with_index = String.iteri
   let map = String.map 
@@ -431,4 +431,14 @@ end = struct
 
   let bind s f = map f s
  
+end
+
+module OmlList = struct
+  include List
+  include OmlListF
+end
+
+module OmlArray = struct
+  include Array
+  include OmlArrayF
 end
