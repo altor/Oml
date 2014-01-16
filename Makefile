@@ -12,9 +12,12 @@ omlPrimitive : omlEnum
 omlFile : omlPrimitive
 	ocamlc -o omlFile.cmo -c src/omlFile.ml
 
-oml : omlFile
-	ocamlc -o oml.cmo -I src/ -c omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo src/oml.ml
-	ocamlc -o oml.cma -I src/ -a unix.cma omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo oml.cmo
+omlParser : omlFile 
+	ocamlc -o omlParser.cmo -c src/omlParser.ml
+
+oml : omlParser
+	ocamlc -o oml.cmo -I src/ -c omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo omlParser.cmo src/oml.ml
+	ocamlc -o oml.cma -I src/ -a unix.cma omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo omlParser.cmo oml.cmo
 
 ocamloml : oml
 	ocamlmktop -custom -o ocamloml oml.cma
