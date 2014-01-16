@@ -29,6 +29,10 @@ module type ENUM = sig
   val map : ('a -> 'b) -> 'a t -> 'b t
   val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
   val fold_right : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+  val sum : int t -> int
+  val prod : int t -> int
+  val sumf : float t -> float
+  val prodf : float t -> float
 
   (** Filtres **)
   val filter : ('a -> bool) -> 'a t -> 'a t
@@ -83,6 +87,10 @@ module OmlListF : ENUM with type 'a t = 'a list = struct
   let each = List.iter
   let each_with_index = List.iteri
   let map = List.map
+  let sum = fold_left (fun a x -> a + x) 0
+  let sumf = fold_left (fun a x -> a +. x) 0.0
+  let prod = fold_left (fun a x -> a * x) 1
+  let prodf = fold_left (fun a x -> a *. x) 1.0 
 
   let copy l = fold_right (fun x a -> x :: a) l neutral
   let reverse l = fold_left (fun a x -> x :: a) neutral l
@@ -218,6 +226,11 @@ module OmlArrayF : ENUM with type 'a t = 'a array = struct
   let map = Array.map 
   let fold_left = Array.fold_left
   let fold_right = Array.fold_right
+  let sum = fold_left (fun a x -> a + x) 0
+  let sumf = fold_left (fun a x -> a +. x) 0.0
+  let prod = fold_left (fun a x -> a * x) 1
+  let prodf = fold_left (fun a x -> a *. x) 1.0 
+
   
   let filter f a = 
     let rec filter acc = function

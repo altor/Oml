@@ -43,6 +43,27 @@ Ce module étend le module Array. Le type proposé par les extensions est `'a Om
      Renvoi l'image du tableau en liste.
 
 
+*    **Oml.Array.sum**  
+     `int array ->  int`   
+     Renvoi la somme de tous les éléments de la liste passée en argument. (en entier, avec des entiers)
+
+
+*    **Oml.Array.prod**  
+     `int array ->  int`   
+     Renvoi le produit de tous les éléments de la liste passée en argument. (en entier avec des entiers)
+
+
+*    **Oml.Array.sumf**  
+     `float array ->  float`   
+     Renvoi la somme de tous les éléments de la liste passée en argument. (en float, avec des floats)
+
+
+
+*    **Oml.Array.prodf**  
+     `float array ->  float`   
+     Renvoi le produit de tous les éléments de la liste passée en argument. (en float, avec des floats)
+
+
 *    **Oml.Array.each**  
      `('a -> unit) -> 'a array -> unit`   
      Applique une fonction à chaque itération d'un tableau.

@@ -57,6 +57,27 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
      Alias de `Oml.List.copy`.
 
 
+*    **Oml.List.sum**  
+     `int list ->  int`   
+     Renvoi la somme de tous les éléments de la liste passée en argument. (en entier, avec des entiers)
+
+
+*    **Oml.List.prod**  
+     `int list ->  int`   
+     Renvoi le produit de tous les éléments de la liste passée en argument. (en entier avec des entiers)
+
+
+*    **Oml.List.sumf**  
+     `float list ->  float`   
+     Renvoi la somme de tous les éléments de la liste passée en argument. (en float, avec des floats)
+
+
+
+*    **Oml.List.prodf**  
+     `float list ->  float`   
+     Renvoi le produit de tous les éléments de la liste passée en argument. (en float, avec des floats)
+
+
 *    **Oml.List.each**  
      `('a -> unit) -> 'a list -> unit`   
      Applique une fonction à chaque itération d'une liste.
