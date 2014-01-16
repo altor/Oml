@@ -39,8 +39,10 @@ Pour assurer une compatibilité avec une version 3.x de OCaML, certains opérate
 Liste des modules ajoutés à OCaML (qui ne dépendent d'aucun module parent).
 
 *   [Oml.Bool](https://github.com/nukiFW/Oml/blob/master/doc/bool.md)
+*   [Oml.File](https://github.com/nukiFW/Oml/blob/master/doc/file.md)
 *   [Oml.Float](https://github.com/nukiFW/Oml/blob/master/doc/float.md)
 *   [Oml.Int](https://github.com/nukiFW/Oml/blob/master/doc/int.md)
+
 
 ###Modules étendus
 Les modules étendus sont des modules qui étendent les fonctionnalités standards d'OCaML. Par soucis de concision, les fonctions qui ne sont pas modifiées ne seront pas documenté (vous pouvez vous réferrer à la documentation du langage pour les fonctions initiales).
