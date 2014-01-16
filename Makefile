@@ -17,10 +17,8 @@ oml : omlFile
 	ocamlc -o oml.cma -I src/ -a unix.cma omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo oml.cmo
 
 ocamloml : oml
-	ocamlc -make-runtime -o omlruntime oml.cma
-	ocamlmktop -custom -o omltoplevel oml.cma
+	ocamlmktop -custom -o ocamloml oml.cma
 
 clean : 
 	rm *.cm*
-	rm omltoplevel
-	rm omlruntime
+	rm ocamloml

@@ -14,11 +14,11 @@ Une fois le dépôt clôné, vous disposez d'un Makefile.
 ##Utilisation 
 
 ###Usage du toplevel OCaMLOML
-Vous pouvez (une fois la commande `make` effectuée) utiliser le toplevel d'OML. Au moyen de la commande `./omltoplevel` ou alors `ocaml oml.cma`.
+Vous pouvez (une fois la commande `make` effectuée) utiliser le toplevel d'OML. Au moyen de la commande `./ocamloml` ou alors `ocaml oml.cma`.
 
 ###Compilation d'un fichier avec OML
 Il suffit de compiler le fichier en chargant la bibliothèque `oml.cma` (se référer aux documentations relatives à la compilation).  
-Ou alors se servir du runtime fourni par l'exécution de la commande `make`, au moyen de la commande `ocamlc -use-runtime omlruntime 'reste des commandes de compilations'`.
+Par défaut, la librairie `Unix` est déjà chargée dans `oml.cma`.
 
 ###Etendre les fonctionnalités
 Pour étendre les modules de CaML (et charger les modules complémentaires) il suffit de faire `open Oml` et l'espace nom `Oml.etc` est tué.
