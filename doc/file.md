@@ -49,18 +49,18 @@ Ce module sert des fonctions de traitement de fichier. Il est basé sur les fonc
 *    **Oml.File.input_char**  
      `in_channel -> char`  
      Consomme un caractère du fichier (passé en argument).  
-     **Alias : ** `Oml.File.next`
+     **Alias :** `Oml.File.next`
 
 
 *    **Oml.File.input_line**  
      `in_channel -> string`  
      Consomme une ligne du fichier (passé en argument).  
-     **Alias : ** `Oml.File.next_line`
+     **Alias :** `Oml.File.next_line`
 
 
 *    **Oml.File.input_byte**  
      `in_channel -> int`  
      Consomme un byte du fichier (passé en argument).  
-     **Alias : ** `Oml.File.next_byte`
+     **Alias :** `Oml.File.next_byte`
 
 ###Ecriture de fichiers
