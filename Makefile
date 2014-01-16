@@ -14,12 +14,13 @@ omlFile : omlPrimitive
 
 oml : omlFile
 	ocamlc -o oml.cmo -I src/ -c omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo src/oml.ml
-	ocamlc -o oml.cma -I src/ -a omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo oml.cmo
+	ocamlc -o oml.cma -I src/ -a unix.cma omlIntro.cmo omlEnum.cmo omlPrimitive.cmo omlFile.cmo oml.cmo
 
 ocamloml : oml
-	ocamlmktop -custom -o ocamloml oml.cma
-
+	ocamlc -make-runtime -o omlruntime oml.cma
+	ocamlmktop -custom -o omltoplevel oml.cma
 
 clean : 
 	rm *.cm*
-	rm ocamloml
+	rm omltoplevel
+	rm omlruntime
