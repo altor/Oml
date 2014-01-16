@@ -1,10 +1,5 @@
 (** Déscription simple d'un document  **)
-module Doc : sig 
-
-  type token
-  type parsed
-
-end = struct
+module Doc = struct
 
   type token = 
   | Title of int * string
