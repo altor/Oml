@@ -13,6 +13,7 @@ module Bool = OmlPrimitive.OmlBool
 module Int = OmlPrimitive.OmlInt
 module Float = OmlPrimitive.OmlFloat
 module Char = OmlPrimitive.OmlChar
+module File = OmlFile.File
 
 let _ =
   if !Sys.interactive
