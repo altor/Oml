@@ -43,6 +43,7 @@ Liste des modules ajoutés à OCaML (qui ne dépendent d'aucun module parent).
 *   [Oml.File](https://github.com/nukiFW/Oml/blob/master/doc/file.md)
 *   [Oml.Float](https://github.com/nukiFW/Oml/blob/master/doc/float.md)
 *   [Oml.Int](https://github.com/nukiFW/Oml/blob/master/doc/int.md)
+*   [Oml.Doc](https://github.com/nukiFW/Oml/blob/master/doc/doc.md)
 
 
 ###Modules étendus
