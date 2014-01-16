@@ -128,6 +128,11 @@ Ce module sert des fonctions de traitement de fichier. Il est basé sur les fonc
 Ces fonctions concernent les fichiers qui n'ont pas a être ouvert, les fonctions ci-dessous ouvre le fichier et le ferme à la fin du traitement. Les fonctions évoquées plus haut feront plutôt office pour des traitements séquentiels, ces fonctions-ci porteront sur les traitement "all-in".
 
 
+*    **Oml.File.content**  
+     `string -> string`  
+     Renvoi le contenu (sous forme de chaine) d'un fichier (dont le chemin est passé en argument sous forme de chaine de caractères).
+
+
 *    **Oml.File.to_char_array**  
      `string -> char array`  
      Transforme un fichier (dont le chemin est passé en argument sous forme de chaine de caractères) en un tableau de caractères.

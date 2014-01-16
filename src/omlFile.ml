@@ -32,6 +32,7 @@ module File : sig
   val to_char_list : string -> char list
   val to_line_list : string -> string list
   val to_byte_list : string -> int list
+  val content : string -> string
   val set_char : ?create:bool -> string -> char -> unit
   val set_string : ?create:bool -> string -> string -> unit
   val set_byte : ?create:bool -> string -> int -> unit
@@ -122,6 +123,17 @@ end = struct
 	close_in chan;
 	List.rev acc
     in tcl []
+
+  let content s = 
+    let chan = open_in s in 
+    let rec content acc = 
+      try 
+	let c = input_char chan in 
+	let a = Printf.sprintf "%s%c" acc c in 
+	content a
+      with 
+      | End_of_file -> acc
+    in content ""
 
   let to_char_array = build_array next
   let to_line_array = build_array next_line
