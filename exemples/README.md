@@ -1,6 +1,6 @@
 #Exemples rapides de l'utilisation de OML
 
-##Fonctions divers
+##Fonctions diverses
 
 ###1. Lancement d'un terminal OML
 Après la compilation d'OML (au moyen de la commande `make`), utiliser, dans le répertoire où vous avez invoqué la commande, cette directive pour lancer un toplevel avec OML chargé : `./ocamloml`.  On peut donc ajouter dans le terminal la directive `open Oml` pour ne pas devoir spécifier chaque fois l'espace nom OML.
