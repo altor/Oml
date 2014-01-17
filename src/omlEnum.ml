@@ -295,7 +295,7 @@ end
    n'est pas comptabile avec le type ENUM (qui prend 
    en argument un type polymorphe)
 **)
-module OmlString : sig
+module OmlStringP : sig
 
   val neutral : string
   val make : int -> char -> string
@@ -454,4 +454,9 @@ end
 module OmlArray = struct
   include Array
   include OmlArrayF
+end
+
+module OmlString = struct
+  include String
+  include OmlStringP
 end
