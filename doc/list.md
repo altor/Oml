@@ -122,7 +122,7 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
      Renvoi l'élément à la position passée en argument.
 
 
-*    **Oml.List.set**  
+*    **Oml.List.set_val**  
      `'a list -> int -> 'a -> 'a list`   
      Renvoi la liste passé en argument avec une modification de la valeur à l'indice donné, par la valeur donnée.
 

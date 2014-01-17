@@ -141,7 +141,7 @@ Ce module propose des fonctionnalités en plus au module `String` de OCaML.
      Renvoi l'élement à l'indice passé en argument d'une chaine de caractères.
 
 
-*    **Oml.String.set**  
+*    **Oml.String.set_val**  
      `string -> int -> char -> string`  
      Renvoi une nouvelle chaine dont l'élément à l'indice donné en argument est substitué par le caractère passé en argument.
 

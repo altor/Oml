@@ -51,7 +51,7 @@ module type ENUM = sig
 
   (** Accesseurs & mutateurs **)
   val at : 'a t -> int -> 'a 
-  val set : 'a t -> int -> 'a -> 'a t
+  val set_val : 'a t -> int -> 'a -> 'a t
 
   (** Effets particuliers **)
   val neutral : 'a t 
@@ -147,7 +147,7 @@ module OmlListF : ENUM with type 'a t = 'a list = struct
   let firsts l = 
     init (List.length l - 1) (fun x -> at l x)
 
-  let set l i v =
+  let set_val l i v =
     init (List.length l) begin fun x ->
       if x = i then v else (at l x)
     end
@@ -279,7 +279,7 @@ module OmlArrayF : ENUM with type 'a t = 'a array = struct
     Array.sub a 0 len
 
   let at a x = a.(x)
-  let set a x v = 
+  let set_val a x v = 
     let na = copy a in 
     Array.set na x v; 
     na
@@ -330,7 +330,7 @@ module OmlString : sig
   val tail : string -> string 
   val firsts : string -> string
   val at : string -> int -> char 
-  val set : string -> int -> char -> string
+  val set_val : string -> int -> char -> string
   val return : char -> string
   val bind : string -> (char -> char) -> string
 
@@ -437,7 +437,7 @@ end = struct
     else String.sub s 0 (len - 1)
 
   let at s x = s.[x]
-  let set s x v = 
+  let set_val s x v = 
     let ns = copy s in 
     ns.[x] <- v;
     ns

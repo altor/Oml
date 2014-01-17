@@ -108,7 +108,7 @@ Ce module étend le module Array. Le type proposé par les extensions est `'a Om
      Renvoi l'élément à la position passée en argument.
 
 
-*    **Oml.Array.set**  
+*    **Oml.Array.set_val**  
      `'a array -> int -> 'a -> 'a array`   
      Renvoi une copie du tableau passé en argument avec une modification de la valeur à l'indice donné, par la valeur donnée.
 
