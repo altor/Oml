@@ -5,7 +5,7 @@
 ###1. Lancement d'un terminal OML
 Après la compilation d'OML (au moyen de la commande `make`), utiliser, dans le répertoire où vous avez invoqué la commande, cette directive pour lancer un toplevel avec OML chargé : `./ocamloml`.  On peut donc ajouter dans le terminal la directive `open Oml` pour ne pas devoir spécifier chaque fois l'espace nom OML.
 
-**Implémentation d'une fonction factorielle**
+**Implémentation d'une fonction factorielle**  
 Usage des fonctions `List.range` et `List.prod` :
 
 ```ocaml
@@ -14,7 +14,7 @@ let factorielle n =
   List.prod range
 ```
 
-**Implémentation rapide d'un générateur de liste**
+**Implémentation rapide d'un générateur de liste**  
 Usage de la fonction `List.bind` (et de fonctions diverses) :
 
 ```ocaml
@@ -35,3 +35,31 @@ let _ =
 ```
 
 (Je reconnais que l'exemple est... douteux ;) ).
+
+**Ecrire une liste dans un fichier (et le créer s'il n'existe pas)**  
+Utilisation des fonctions de fichiers (et de `openf_out` qui facilite l'ouverture de fichier) :
+
+```ocaml
+(** Ecrire une liste **)
+let li = 
+  [
+    "Arthur";"Xavier";"Pierre";"Paul";"Maxime";"Jeremy";
+    "Mickael";"Antoine";"Karim";
+  ]
+let dans = ()
+let ecrire liste dans fichier = 
+  let chan = File.openf_out fichier "w+" in 
+  let rec ecrire = function 
+    | [] -> dans
+    | x :: xs -> 
+      File.push_string chan (Printf.sprintf "%s\n" x);
+      ecrire xs
+  in ecrire liste
+
+let _ = 
+  ecrire li dans "test.txt";
+  Printf.printf "Le fichier a été écrit ! \n"; 
+  Printf.printf "Contenu du fichier : \n\n:%s" (File.content "test.txt")
+  
+```
+(A noter que le `dans` ne sert absolument à rien, c'était juste pour faire un SEMI-DSL sans aucun intérêt).
