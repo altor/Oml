@@ -73,6 +73,27 @@ Ce module propose des fonctionnalités en plus au module `String` de OCaML.
      `string -> char list`  
      Renvoi l'image de la chaine de caractère en liste de caractères.
 
+
+*    **Oml.String.split**  
+     `string -> string -> string list`  
+     Utilise le premier argument comme délimiteur et découpe la chaine (2ème argument) à chaque délimiteur.
+
+
+*    **Oml.String.lines**  
+     `string -> string list`  
+     Renvoi une liste contenant chaque lignes d'une chaine de caractères.
+
+
+*    **Oml.String.words**  
+     `string -> string list`  
+     Renvoi une liste contenant chaque mots d'une chaine de caractères. (Découpage approximatif, la fonction se sert de l'espace comme séparateur).
+
+
+*    **Oml.String.join**  
+     `?delim:string -> string list-> string`  
+     Fusionne chaque élément d'une liste de chaine de caractères (avec une possibilité de définir un séparateur optionnel).
+
+
 *    **Oml.String.to_array**  
      `string -> char array`  
      Renvoi l'image de la chaine de caractère en tableau de caractères.

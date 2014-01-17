@@ -333,6 +333,10 @@ module OmlStringP : sig
   val set_val : string -> int -> char -> string
   val return : char -> string
   val bind : string -> (char -> char) -> string
+  val split : string -> string -> string list
+  val lines : string -> string list
+  val words : string -> string list
+  val join : ?delim:string -> string list -> string
 
 end = struct
 
@@ -443,6 +447,12 @@ end = struct
     ns
 
   let bind s f = map f s
+
+  let join ?(delim = "") = 
+    List.fold_left (fun a x -> a ^ x) "" 
+  let split r = Str.split @@ Str.regexp r
+  let lines = split "\n"
+  let words = split " "
  
 end
 
