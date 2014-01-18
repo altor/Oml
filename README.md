@@ -52,6 +52,7 @@ Les modules étendus sont des modules qui étendent les fonctionnalités standar
 
 *   [Oml.Array](https://github.com/nukiFW/Oml/blob/master/doc/array.md)
 *   [Oml.Char](https://github.com/nukiFW/Oml/blob/master/doc/char.md)
+*   [Oml.Marshal](https://github.com/nukiFW/Oml/blob/master/doc/marshal.md)
 *   [Oml.List](https://github.com/nukiFW/Oml/blob/master/doc/list.md)
 *   [Oml.String](https://github.com/nukiFW/Oml/blob/master/doc/string.md)   
 

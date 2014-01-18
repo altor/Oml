@@ -18,6 +18,7 @@ module Float = OmlPrimitive.OmlFloat
 module Char = OmlPrimitive.OmlChar
 module File = OmlFile.OmlFile
 module Doc = OmlParser.Doc
+module Marshal = OmlMarshal.OmlMarshal
 
 let _ =
   if !Sys.interactive
