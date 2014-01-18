@@ -104,3 +104,7 @@ Ce module propose une interface minimaliste d'affichage/saisie.
      `unit -> char`  
      Lit le caractère saisi au clavier.  
      **Alias :** `Oml.IO.get_char`
+
+###Traitement des fichiers
+
+Se réferer à [Oml.File](https://github.com/nukiFW/Oml/blob/master/doc/file.md) (Les fonctions accessibles via `File.etc` sont accessible via `IO.etc`).

@@ -8,7 +8,7 @@ let ( $ ) = id
 let switch (a, b) = b, a
 
 (** Inclusion des modules dans Oml **)
-module IO = OmlIO.OmlIO
+module IO = OmlFile.IOAndFile
 module List = OmlEnum.OmlList
 module Array = OmlEnum.OmlArray
 module String = OmlEnum.OmlString
@@ -16,7 +16,7 @@ module Bool = OmlPrimitive.OmlBool
 module Int = OmlPrimitive.OmlInt
 module Float = OmlPrimitive.OmlFloat
 module Char = OmlPrimitive.OmlChar
-module File = OmlFile.File
+module File = OmlFile.OmlFile
 module Doc = OmlParser.Doc
 
 let _ =

@@ -1,6 +1,6 @@
 (** Fonctionnalités relatives au traitement des fichiers **)
 
-module File : sig
+module OmlFile : sig
 
   val default_chmod : int
   val open_in : string -> in_channel
@@ -161,4 +161,9 @@ end = struct
   let append_string ?(create=false) = append push_string create
   let append_byte ?(create=false) = append push_byte create
 
+end
+
+module IOAndFile = struct
+  include OmlIO.OmlIO
+  include OmlFile
 end
