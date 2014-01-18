@@ -7,17 +7,22 @@ module OmlIO : sig
   val stdout : out_channel
   val stderr : out_channel
 
-  val print : 'a -> unit
+  val dump : 'a -> unit
   val newline : ?error:bool -> unit -> unit
   val println : ?error:bool -> string -> unit 
   val print_int : ?error:bool -> int -> unit 
+  val print : ?error:bool -> string -> unit
   val print_string : ?error:bool -> string -> unit 
   val print_bool : ?error:bool -> bool -> unit 
   val print_float : ?error:bool -> float -> unit
   val print_char : ?error:bool -> char -> unit
   val format : ('a, out_channel, unit) format -> 'a
+  val printf : ('a, out_channel, unit) format -> 'a
   val sformat : ('a, unit, string) format -> 'a
+  val sprintf :  ('a, unit, string) format -> 'a
 
+  val scanf : ('a, 'b, 'c, 'd) Scanf.scanner
+  val scan : ('a, Scanf.Scanning.in_channel, 'b, 'c -> 'd, 'a -> 'e, 'e) format6 -> 'c -> 'd
   val read_line : unit -> string 
   val get : unit -> string 
   val read_int : unit -> int
@@ -37,7 +42,7 @@ end = struct
   let stdout = Pervasives.stdout
   let stderr = Pervasives.stderr
 
-  let print = show
+  let dump = show
   
   let newline ?(error = false) = 
     if error then
@@ -48,7 +53,14 @@ end = struct
     if error then
       Pervasives.prerr_endline
     else Pervasives.print_endline
+
+  let print_string ?(error = false) = 
+    if error then
+      Pervasives.prerr_string
+    else Pervasives.print_string
   
+  let print = print_string
+
   let print_int ?(error = false) =
     if error then
       Pervasives.prerr_int
@@ -79,14 +91,17 @@ end = struct
  
   let format = Printf.printf
   let sformat = Printf.sprintf
+  let printf = format
+  let sprintf = sformat
     
+  let scanf = Scanf.scanf
   let scan r f = 
-    let res = Scanf.scanf r f in 
-    Scanf.scanf "%[^\r\n]\n" (fun _ -> ());
-    res
+    let res = scanf r f in 
+    scanf "%[^\r\n]\n" (fun _ -> ());
+    res 
 
   let read_line () = 
-    Scanf.scanf "%[^\r\n]\n" (fun x -> x)
+    scanf "%[^\r\n]\n" (fun x -> x)
   let get = read_line 
   let read_int () =  scan " %d" (fun x -> x)
   let get_int = read_int
