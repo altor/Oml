@@ -32,6 +32,7 @@ module OmlFile : sig
   val to_char_list : string -> char list
   val to_line_list : string -> string list
   val to_byte_list : string -> int list
+  val words : string -> string list
   val content : string -> string
   val set_char : ?create:bool -> string -> char -> unit
   val set_string : ?create:bool -> string -> string -> unit
@@ -39,6 +40,11 @@ module OmlFile : sig
   val append_char : ?create:bool -> string -> char -> unit 
   val append_string : ?create:bool -> string -> string -> unit
   val append_byte : ?create:bool -> string -> int -> unit
+  val file_exists : string -> bool
+  val exists : string -> bool
+  val mkdir : ?chmod:int -> string -> unit
+  val rmdir : string -> unit  
+    
 
 end = struct
 
@@ -142,6 +148,8 @@ end = struct
   let to_line_list = build_list next_line
   let to_byte_list = build_list next_byte
 
+  let words s = OmlEnum.OmlString.words (content s)
+
   let set f create file v =
     let mode = if create then "w-+" else "w-" in 
     let chan = openf_out file mode in 
@@ -160,6 +168,12 @@ end = struct
   let append_char ?(create=false) = append push_char create
   let append_string ?(create=false) = append push_string create
   let append_byte ?(create=false) = append push_byte create
+
+  let file_exists = Sys.file_exists
+  let exists = file_exists
+  let mkdir ?(chmod = default_chmod) name = 
+    Unix.mkdir name chmod
+  let rmdir name = Unix.rmdir name 
 
 end
 

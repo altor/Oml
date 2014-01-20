@@ -133,6 +133,11 @@ Ces fonctions concernent les fichiers qui n'ont pas a être ouvert, les fonction
      Renvoi le contenu (sous forme de chaine) d'un fichier (dont le chemin est passé en argument sous forme de chaine de caractères).
 
 
+*    **Oml.File.words**  
+     `string -> string list`  
+     Renvoi les mots d'un fichier (dont le chemin est passé en argument sous forme de chaine de caractères).
+
+
 *    **Oml.File.to_char_array**  
      `string -> char array`  
      Transforme un fichier (dont le chemin est passé en argument sous forme de chaine de caractères) en un tableau de caractères.
@@ -201,3 +206,14 @@ Ces fonctions concernent les fichiers qui n'ont pas a être ouvert, les fonction
 *    **Oml.File.append_byte**  
      `?create:bool -> string -> int -> unit`  
      Ajoute le byte passé en argument dans le fichier. Si le label `create` (qui par défaut vaut `false`) est mis à `true`, le fichier sera créé s'il n'existe pas.
+
+###Relatif aux dossiers
+
+*    **Oml.File.mkdir**  
+     `?chmod:int -> string -> unit`  
+     Crée un dossier (Par défaut, le chmod = 777).
+
+
+*    **Oml.File.rmdir**  
+     `string -> unit`  
+     Supprime le dossier vide passé en argument (sous forme de chaine).
