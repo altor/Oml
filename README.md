@@ -25,17 +25,6 @@ Pour étendre les modules de CaML (et charger les modules complémentaires) il s
 
 ##Documentation 
 
-###Fonctions standards
-
-Pour assurer une compatibilité avec une version 3.x de OCaML, certains opérateurs ont étés ajoutés à Oml:
-
-**Opérateurs infixes**  
-*    `( |> )` `'a -> ('a -> 'b) -> 'b` : Passe un argument à une fonction par la gauche  
-*    `( @@ )` `('a -> 'b) -> 'a -> 'b` : Passe un argument à une fonction par la droite
-
-**Fonctionnalités simples**  
-*    `switch` `'a * 'b -> 'b * 'a` : Inverse un couple
-
 ###Modules ajoutés
 Liste des modules ajoutés à OCaML (qui ne dépendent d'aucun module parent).
 
@@ -44,7 +33,7 @@ Liste des modules ajoutés à OCaML (qui ne dépendent d'aucun module parent).
 *   [Oml.Float](https://github.com/nukiFW/Oml/blob/master/doc/float.md)
 *   [Oml.Int](https://github.com/nukiFW/Oml/blob/master/doc/int.md)
 *   [Oml.IO](https://github.com/nukiFW/Oml/blob/master/doc/io.md)
-*   [Oml.Doc](https://github.com/nukiFW/Oml/blob/master/doc/doc.md)
+*   [Oml.Poly](https://github.com/nukiFW/Oml/blob/master/doc/poly.md)
 
 
 ###Modules étendus
