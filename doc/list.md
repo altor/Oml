@@ -141,11 +141,11 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
 *    **Oml.List.bind**  
      `'a list -> ('a -> 'b list) -> 'b list`   
      Opérateur monadique de composition.  
-     **Alias** : `Oml.List.( >>= )
+     **Alias** : `Oml.List.( >>= )`
 
 
 *    **Oml.List.fmap**  
      `'a list -> ('a -> 'b) -> 'b list`   
      Opérateur monadique de mapping.  
-     **Alias** : `Oml.List.( >>| )
+     **Alias** : `Oml.List.( >>| )`
 

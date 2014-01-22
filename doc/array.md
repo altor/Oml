@@ -126,10 +126,10 @@ Ce module étend le module Array. Le type proposé par les extensions est `'a Om
 *    **Oml.Array.bind**  
      `'a array -> ('a -> 'b array) -> 'b array`   
      Opérateur monadique de composition.  
-     **Alias** : `Oml.Array.( >>= )
+     **Alias** : `Oml.Array.( >>= )`
 
 
 *    **Oml.Array.fmap**  
      `'a array -> ('a -> 'b) -> 'b array`   
      Opérateur monadique de mapping.  
-     **Alias** : `Oml.Array.( >>| )
+     **Alias** : `Oml.Array.( >>| )`
