@@ -6,6 +6,8 @@ Ce module décrit les opérations primitives sur les entiers. (le type `Oml.Int.
 
 *    `Oml.Int.zero` : `0`
 *    `Oml.Int.One` : `1`
+*    `Oml.Int.max_value` : Renvoi la plus grande valeur entière
+*    `Oml.Int.min_value` : Renvoi la plus petite valeur entière
 
 ##Fonctions du modules
 
@@ -84,4 +86,9 @@ Ce module décrit les opérations primitives sur les entiers. (le type `Oml.Int.
 *    **Oml.Int.pow**  
      `int -> int -> int`  
      Renvoi un entier mis à une puissance.
+
+
+*    **Oml.Int.sqrt**  
+     `int -> int`  
+     Renvoi la racine carrée de l'entier passé en argument.
 
