@@ -122,7 +122,7 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
      Renvoi l'élément à la position passée en argument.
 
 
-*    **Oml.List.set_val**  
+*    **Oml.List.set'**  
      `'a list -> int -> 'a -> 'a list`   
      Renvoi la liste passé en argument avec une modification de la valeur à l'indice donné, par la valeur donnée.
 
@@ -137,6 +137,15 @@ Ce module étend le module List. Le type proposé par les extensions est `'a Oml
      Construit un singleton composé par l'argument.
 
 
+
 *    **Oml.List.bind**  
+     `'a list -> ('a -> 'b list) -> 'b list`   
+     Opérateur monadique de composition.  
+     **Alias** : `Oml.List.( >>= )
+
+
+*    **Oml.List.fmap**  
      `'a list -> ('a -> 'b) -> 'b list`   
-     Applique une fonction à chaque élément d'une liste (et renvoi la liste modifiée).
+     Opérateur monadique de mapping.  
+     **Alias** : `Oml.List.( >>| )
+

@@ -108,7 +108,7 @@ Ce module étend le module Array. Le type proposé par les extensions est `'a Om
      Renvoi l'élément à la position passée en argument.
 
 
-*    **Oml.Array.set_val**  
+*    **Oml.Array.set'**  
      `'a array -> int -> 'a -> 'a array`   
      Renvoi une copie du tableau passé en argument avec une modification de la valeur à l'indice donné, par la valeur donnée.
 
@@ -124,5 +124,12 @@ Ce module étend le module Array. Le type proposé par les extensions est `'a Om
 
 
 *    **Oml.Array.bind**  
+     `'a array -> ('a -> 'b array) -> 'b array`   
+     Opérateur monadique de composition.  
+     **Alias** : `Oml.Array.( >>= )
+
+
+*    **Oml.Array.fmap**  
      `'a array -> ('a -> 'b) -> 'b array`   
-     Applique une fonction à chaque élément d'un tableau (et renvoi le tableau modifié).
+     Opérateur monadique de mapping.  
+     **Alias** : `Oml.Array.( >>| )
