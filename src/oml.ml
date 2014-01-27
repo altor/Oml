@@ -10,6 +10,7 @@ module Float   = OmlFloat
 module Char    = OmlChar
 module File    = OmlFile
 module Marshal = OmlMarshal
+module Database = OmlDatabase
 
 (* Affichage du message en toplevel *)
 let _ = 

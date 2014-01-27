@@ -20,13 +20,14 @@ base : libc
 	ocamlc -o omlChar.cmo -I ../ -c omlNumeric.cmo src/omlChar.ml
 	ocamlc -o omlFile.cmo -I ../ -c omlIO.cmo src/omlFile.ml
 	ocamlc -o omlMarshal.cmo -c src/omlMarshal.ml
+	ocamlc -o omlDatabase.cmo -c src/omlDatabase.ml
 
 lib : base
 
 	echo "Construction de la librairie générale"
-	ocamlc -custom -o oml.cmo -I ../ -c oml.o omlMonad.cmo omlPoly.cmo omlIO.cmo  omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo  src/oml.ml
+	ocamlc -custom -o oml.cmo -I ../ -c oml.o omlMonad.cmo omlPoly.cmo omlIO.cmo  omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  src/oml.ml
 
-	ocamlc -o oml.cma -a unix.cma str.cma omlMonad.cmo omlPoly.cmo omlIO.cmo omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo oml.cmo 
+	ocamlc -o oml.cma -a unix.cma str.cma omlMonad.cmo omlPoly.cmo omlIO.cmo omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  oml.cmo 
 
 toplevel : lib 
 	echo "Construction du toplevel"
