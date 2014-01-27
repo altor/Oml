@@ -50,3 +50,4 @@ Les modules étendus sont des modules qui étendent les fonctionnalités standar
 
 
 ##Conclusion
+L'objectif d'**OML** n'est pas de fournir la "meilleure bibliothèque du monde" pour le langage OCaML, mais de s'inspirer des outils Ruby et Erlang pour accélerer mon processus de développement. Il est évident qu'il existe des solutions plus performantes (et qui offrent plus d'outils) mais ça n'en reste pas moins une expérience amusante.
