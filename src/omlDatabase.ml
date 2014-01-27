@@ -272,6 +272,7 @@ end = struct
 
   let drop_table db table = 
     table.entries <- [];
+    table.size <- 0;
     dump_db db; 
     table
 
