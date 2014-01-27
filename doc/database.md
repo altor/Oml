@@ -179,9 +179,59 @@ Renvoi la valeur d'un champ particulière (en fonction de son nom).
 
 
 ##Requêtes
+Cette section permet aussi d'accéder à des valeurs mais au moyen de filtres un peu particuliers. 
 
 
+**Oml.Database.query**  
+`(record -> bool) -> table -> record list `  
+Fonctionne comme `List.filter` mais pour une table (filtre les records en fonction d'une fonction anonyme).
 
+**Oml.Database.find_one**  
+`(record -> bool) -> table -> record `  
+Idem que `query` mais renvoi le premier record qui respecte le prédicat.
+
+**Oml.Database.max**  
+`table -> string -> record`  
+Renvoi le plus grand record (en utilisant le champ passé sous forme de chaine de caractères) d'une table.
+
+
+**Oml.Database.min**  
+`table -> string -> record`  
+Renvoi le plus petit record (en utilisant le champ passé sous forme de chaine de caractères) d'une table.
+
+
+**Oml.Database.get_last**  
+`table -> record`  
+Renvoi le dernier record sauvegardé dans une table.
+
+
+**Oml.Database.get_last_field**  
+`table -> string -> record`  
+Renvoi le champ passé en argument du dernier record  sauvegardé dans une table.
+
+##Delestage des tables
+
+
+**Oml.Database.delete_if**  
+`database -> table -> (record -> bool) -> table`  
+Supprime tous les records d'une table qui respecte le prédicat passé en argument.
+
+
+**Oml.Database.keep_if**  
+`database -> table -> (record -> bool) -> table`  
+Supprime tous les records d'une table qui ne respecte pas le prédicat passé en argument.
+
+
+**Oml.Database.drop_table**  
+`database -> table -> table`  
+Supprime tous les records d'une table.
+
+
+**Oml.Database.remove_table**  
+`database -> table -> unit`  
+Supprime la table de la base de données passée en argument.
+
+##Exemple d'usage du module
 
 
 
