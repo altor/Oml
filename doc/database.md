@@ -122,7 +122,8 @@ let table = Database.create_table db "uneTable" [
     "nom", Database.string;
     "sexe", Database.char
 ]
-```  Par exemple
+```  
+Par exemple.
 
 
 
