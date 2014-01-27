@@ -33,3 +33,53 @@ Représente une table (stockée dans une base de données).
 Représente un enregistrement dans une table.
 
 ##Fonctions de conversions
+Pour stocker plusieurs valeurs dans une liste, on utilise des variantes polymorphiques. Ces fonctions permettent de décrire des données polymorphes : 
+
+**Oml.Database.int**  
+`Database.field_header`  
+Renvoi l'étiquette pour décrire un champ entier.
+
+
+**Oml.Database.float**  
+` Database.field_header`  
+Renvoi l'étiquette pour décrire un champ flottant.
+
+
+**Oml.Database.char**  
+`Database.field_header`  
+Renvoi l'étiquette pour décrire un champ caractère.
+
+
+**Oml.Database.bool** 
+`Database.field_header`  
+Renvoi l'étiquette pour décrire un champ booléen.
+
+
+**Oml.Database.string**  
+`Database.field_header`  
+Renvoi l'étiquette pour décrire un champ chaine de caractère.
+
+
+**Oml.Database.to_int**  
+`int -> Database.field`  
+Transforme un entier CaML en un entier pour la base de données.
+
+
+**Oml.Database.to_float**  
+`float -> Database.field`  
+Transforme un entier CaML en un flottant pour la base de données.
+
+
+**Oml.Database.to_char**  
+`char -> Database.field`  
+Transforme un entier CaML en un caractère pour la base de données.
+
+
+**Oml.Database.to_bool**  
+`bool -> Database.field`  
+Transforme un entier CaML en un booléen pour la base de données.
+
+
+**Oml.Database.to_string**  
+`string -> Database.field`  
+Transforme un entier CaML en une chaine de caractère pour la base de données.
