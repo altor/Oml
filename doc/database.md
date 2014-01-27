@@ -50,7 +50,7 @@ Renvoi l'étiquette pour décrire un champ flottant.
 Renvoi l'étiquette pour décrire un champ caractère.
 
 
-**Oml.Database.bool** 
+**Oml.Database.bool**  
 `Database.field_header`  
 Renvoi l'étiquette pour décrire un champ booléen.
 
@@ -67,19 +67,64 @@ Transforme un entier CaML en un entier pour la base de données.
 
 **Oml.Database.to_float**  
 `float -> Database.field`  
-Transforme un entier CaML en un flottant pour la base de données.
+Transforme un flottant CaML en un flottant pour la base de données.
 
 
 **Oml.Database.to_char**  
 `char -> Database.field`  
-Transforme un entier CaML en un caractère pour la base de données.
+Transforme un caractère CaML en un caractère pour la base de données.
 
 
 **Oml.Database.to_bool**  
 `bool -> Database.field`  
-Transforme un entier CaML en un booléen pour la base de données.
+Transforme un booléen CaML en un booléen pour la base de données.
 
 
 **Oml.Database.to_string**  
 `string -> Database.field`  
-Transforme un entier CaML en une chaine de caractère pour la base de données.
+Transforme une chaine CaML en une chaine de caractère pour la base de données.
+
+
+**Oml.Database.of_int**  
+`Database.field -> int`  
+Transforme un entier de la base de données en un entier CaML.
+
+**Oml.Database.of_float**  
+`Database.field -> float`  
+Transforme un flottant de la base de données en un flottant CaML.
+
+**Oml.Database.of_char**  
+`Database.field -> char`  
+Transforme un caractère de la base de données en un caractère CaML.
+
+**Oml.Database.of_bool**  
+`Database.field -> bool`  
+Transforme un booléen de la base de données en un booléen CaML.
+
+**Oml.Database.of_string**  
+`Database.field -> string`  
+Transforme une chaine de caractères de la base de données en une chaine de caractère CaML.
+
+##Fonctions de créations de données
+
+**Oml.Database.create**  
+`string -> database`  
+Construit une base de données dans le fichier passé en argument.
+
+**Oml.Database.create_table**  
+`database -> string -> (string * field_header) list -> table`  
+Construit la table :  
+```ocaml
+open Oml
+let db = Database.create "UneBDD.txt"
+let table = Database.create_table db "uneTable" [
+    "id", Database.id;
+    "nom", Database.string;
+    "sexe", Database.char
+]
+```  Par exemple
+
+
+
+
+
