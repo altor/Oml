@@ -58,6 +58,8 @@ module AbstractDB : sig
   val records : table -> record list
   val query : (record -> bool) -> table -> record list
   val find_one : (record -> bool) -> table -> record
+  val max : table -> string -> record
+  val min : table -> string -> record  
   val delete_if : database -> table -> (record -> bool) -> table 
   val keep_if : database -> table -> (record -> bool) -> table
   val drop_table : database -> table -> table
@@ -219,8 +221,28 @@ end = struct
       List.hd sub 
     else raise No_record
 
-  let keep_if db table f = 
-    table.entries <- List.filter f table.entries;
+  let max table f  = 
+    let sub = records table in 
+    List.hd (List.sort (
+      fun a b -> compare (field a f) (field b f)
+    ) sub)
+
+  
+  let min table f  = 
+    let sub = records table 
+    and len = table.size in
+    List.hd (List.sort (
+      fun a b -> len - (compare (field a f) (field b f))
+    ) sub)
+
+  let sort table f = 
+    List.sort f (records table)
+
+  let keep_if db table f =
+    let sub = List.filter f table.entries in 
+    let len = List.length sub in 
+    table.entries <- sub;
+    table.size <- len;
     dump_db db; 
     table
 
