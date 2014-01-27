@@ -232,8 +232,97 @@ Supprime tous les records d'une table.
 Supprime la table de la base de données passée en argument.
 
 ##Exemple d'usage du module
+Comme vous pouvez le voir, il semblerait qu'il manque des fonctionnalités, mais comme il est très facile de transformer une table en liste de records, je n'ai pas implémenté trop de fonctions. Voici un tout petit carnet d'adresse implémenter en très peu de temps qui présente une manière (à la sémantique douteuse) d'utiliser la base de données : 
 
+```ocaml
+(* Importation d'OML *)
+open Oml
 
+(* Initialisation de la base de données *)
+let database, contacts  = 
+  try 
+    let db = Database.load "anuaire.omldb" in 
+    (db, Database.get_table db "contacts")
+   with 
+  (* Si la base de données n'existe pas, on la crée *)
+  | Sys_error _ -> 
+    let db = Database.create "anuaire.omldb" in 
+    (* Création de la table *)
+    let table = 
+      Database.create_table db "contacts" [
+	"id",   Database.int;
+	"nom",  Database.string;
+	"mail", Database.string;
+      ] in (db, table)
+      
+(* Procédure principale *)
+let _ = 
 
+  let supprimer () = 
+    if (Database.table_length contacts) = 0 then 
+      IO.printf "\nIl n y a aucun champ à supprimer"
+    else begin
+      IO.println "ID a supprimer ?>";
+      let id = IO.read_int () in 
+      ignore (Database.delete_if database contacts 
+	(fun x -> Database.of_int(Database.field x "id") = id));
+      () 
+    end
+  in 
+
+  let ajouter () = 
+    IO.println "Nom?";
+    let nom = IO.get () in 
+    IO.println "\nEmail?";
+    let mail = IO.get () in 
+    let id = 
+      try Database.get_last_field contacts "id"
+      with _ -> Database.to_int 0 
+    in 
+    let new_id = succ (Database.of_int id) in  
+    (* Création d'un record *)
+    ignore (Database.create_record database contacts [
+      Database.to_int new_id;
+      Database.to_string nom; 
+      Database.to_string mail
+    ])
+	
+    in let choice = ref 1 
+       in while !choice < 3 do
+         (* Affichage de la liste  *)
+	 IO.newline ();
+	 IO.newline ();
+	 (* Itération sur la base de données *)
+	 let records =
+	   List.sort (fun x y -> 
+	     let a = Database.of_int(Database.field x "id")
+	     and b = Database.of_int(Database.field y "id")
+	     in compare a b
+	   ) (Database.records contacts) 
+	 in
+	 List.iter begin 
+	   fun record -> 
+	     let id = Database.of_int (Database.field record "id")
+	     and no = Database.of_string (Database.field record "nom")
+	     and ml = Database.of_string (Database.field record "mail")
+	     in IO.printf "%d - %s - %s \n" id no ml
+	 end records;
+	 IO.newline ();
+	 IO.newline ();
+         (* Traitement de la sélection *)
+	 IO.println "1.)Ajouter un contact?";
+	 IO.println "2.)Supprimer un contact?";
+	 IO.println "3.)Quitter?";
+	 IO.newline ();
+	 IO.println "Votre choix?>";
+	 choice := IO.read_int ();
+	 match !choice with 
+	 | 1 -> ajouter () 
+	 | 2 -> supprimer ()
+	 | _ -> ()
+       done
+ 
+```
+Comme vous pouvez le voir, je me sers de fonctionnalités déjà existante dans CaML pour plus de fonctionnalités.
 
 
