@@ -118,9 +118,9 @@ Construit la table :
 open Oml
 let db = Database.create "UneBDD.txt"
 let table = Database.create_table db "uneTable" [
-    "id", Database.id;
-    "nom", Database.string;
-    "sexe", Database.char
+  "id", Database.id;
+  "nom", Database.string;
+  "sexe", Database.char
 ]
 ```
 Crée la table `uneTable` dans la base de données `UneBDD.txt`.
@@ -135,7 +135,52 @@ create_record db table [
   Database.to_char 'M'
 ]
 ```
-Ajoutera le champ dans la base de données `UneBDD.tx' et dans la table `uneTable`.
+Ajoutera le champ dans la base de données `UneBDD.txt` et dans la table `uneTable`.
+
+##Récupération de données 
+
+**Oml.Database.load**  
+`string -> database`  
+Charge et renvoi une base de données.
+
+
+**Oml.Database.get_table**  
+`database -> string -> table`  
+Renvoi une table d'une base de données sur base de son nom.
+
+
+**Oml.Database.table_exists**  
+`database -> string -> bool`  
+Prend une une base de données en argument, un nom de table (sous forme de chaine de caractères) et renvoi `true` si elle existe, `false` sinon.
+
+**Oml.Database.table_length**  
+`table -> int`  
+Renvoi le nombre de records dans une table.
+
+
+**Oml.Database.records**  
+`table -> record list`  
+Renvoi la liste des records d'une table.
+
+
+**Oml.Database.values**  
+`record -> field list`  
+Renvoi la liste des valeurs stockée dans un record.
+
+
+**Oml.Database.zip_values**  
+`record -> (string * field) list`  
+Renvoi la liste des valeurs associé au nom de leur clé, stockée dans un record.
+
+
+**Oml.Database.field**  
+`record -> string -> field`  
+Renvoi la valeur d'un champ particulière (en fonction de son nom).
+
+
+##Requêtes
+
+
 
 
 
