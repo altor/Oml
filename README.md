@@ -29,6 +29,7 @@ Pour étendre les modules de CaML (et charger les modules complémentaires) il s
 Liste des modules ajoutés à OCaML (qui ne dépendent d'aucun module parent).
 
 *   [Oml.Bool](https://github.com/nukiFW/Oml/blob/master/doc/bool.md)
+*   [Oml.Database](https://github.com/nukiFW/Oml/blob/master/doc/database.md)
 *   [Oml.File](https://github.com/nukiFW/Oml/blob/master/doc/file.md)
 *   [Oml.Float](https://github.com/nukiFW/Oml/blob/master/doc/float.md)
 *   [Oml.Int](https://github.com/nukiFW/Oml/blob/master/doc/int.md)
