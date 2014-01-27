@@ -122,8 +122,21 @@ let table = Database.create_table db "uneTable" [
     "nom", Database.string;
     "sexe", Database.char
 ]
-```  
-Par exemple.
+```
+Crée la table `uneTable` dans la base de données `UneBDD.txt`.
+
+**Oml.Database.create_record**  
+`database -> table -> field list -> record`  
+Sauvegarde un record dans une table. Par exemple (cumulé à l'exemple précédent) : 
+```ocaml
+create_record db table [
+  Database.to_int 1; 
+  Database.to_string "Xavier";
+  Database.to_char 'M'
+]
+```
+Ajoutera le champ dans la base de données `UneBDD.tx' et dans la table `uneTable`.
+
 
 
 
