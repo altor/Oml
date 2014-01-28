@@ -1,7 +1,16 @@
-(* Déscritpion des exceptions *)
-exception Type_error
+(*
+  Ce module permet de traiter des bases de données embarquées
+  (au moyen de fichiers) pour des applications ne pouvant pas 
+  se connecter à un serveur pour les besoins de l'application.
+*)
 
-(* Déscription des éléments relatifs aux champs *)
+(* Description des exceptions *)
+exception Type_error
+exception Uknown_database of string
+exception Uknown_table of string
+exception Uknown_field of string
+
+(* Description des éléments relatifs aux champs *)
 type field_type = [
   `Int 
 | `Float 
@@ -131,8 +140,10 @@ object(self)
   method values = attr_values
   method values_with_labels = 
     List.combine (self#labels) attr_values
-  method field label = 
-    List.assoc label (self#values_with_labels)
+  method field label =
+    try List.assoc label (self#values_with_labels)
+    with 
+    | Not_found -> raise (Uknown_field label)
   method get_prototypes = prototypes
   method get_prototype label = 
     List.find (fun x -> (fst x) = label) prototypes
@@ -172,6 +183,7 @@ object(self)
     self#cloneset (List.sort f record_list)
   method query f = 
     self#cloneset (List.find_all f record_list)
+  method to_subset = self#cloneset record_list
   (* Itération *)
   method iter f  = List.iter f record_list
   method iteri f = List.iteri f record_list
@@ -221,10 +233,21 @@ object(self)
   (* Création d'une table (dans la base de données) *)
   method tables = table_list
   method get_table name = 
-    List.find (fun x -> x#name = name) table_list
+    try List.find (fun x -> x#name = name) table_list
+    with 
+    | Not_found -> raise (Uknown_table name)
   method create_table name prototypes =
     table_list <- (new table (name, prototypes)) :: table_list;
     self#dump
+  method append_table table = 
+    table_list <- table :: table_list;
+    self#dump
+  method table_exists name = 
+    try 
+      ignore (List.find (fun x -> x#name = name) table_list);
+      true 
+    with 
+    | _ -> false
 
   (* Sauvegarde de la base de données  *)
   method dump = 
@@ -245,9 +268,13 @@ object(self)
   method keep_if table_name f = 
     (self#get_table table_name)#keep_if f; 
     self#dump
-  method insert table_name record = 
-    (self#get_table table_name)#insert record;
+  method insert table_name values = 
+    let t = self#get_table table_name in 
+    let r = new record(t#get_prototypes, values) in
+    t#insert r;
     self#dump
+  method append_record table_name record = 
+    (self#get_table table_name)#insert record
   method drop table_name = 
     (self#get_table table_name)#drop;
     self#dump
@@ -260,5 +287,32 @@ let bool id = (id, `Bool)
 let char id = (id, `Char)
 let string id = (id, `String)
 
+let to_int x = `Int x 
+let to_bool x = `Bool x 
+let to_float x = `Float x
+let to_char x = `Char x 
+let to_string x = `String x
 
+(*
+  API générale de l'application.
+  Point d'entrée de l'outil.
+*)
+let load file =
+  try 
+    let channel = open_in file in 
+    let db : database = Marshal.from_channel channel in 
+    close_in channel; 
+    db
+  with 
+    _ -> raise (Uknown_database file)
 
+let create file = new database(file)
+let create_table name proto = new table(name, proto)
+let create_record proto values = new record (proto, values)
+  
+(*
+  Cette fonction ne vérifie pas l'existence propre d'une DB. 
+  Un fichier n'étant pas une base de données sera considéré 
+  comme une base de données valide.
+*)
+let database_exists = Sys.file_exists
