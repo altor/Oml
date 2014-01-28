@@ -61,7 +61,7 @@ object(self)
   method private boi x = not (x = 0)
   method private bof x = not (x = 0.)
   method private boc x = not (x = '0')
-  method private bos x = (String.lowercase x = "false" || x = "0")
+  method private bos x = not (String.lowercase x = "false" || x = "0")
   (* Char *)
   method private coi = char_of_int
   method private cof x = self#coi(self#iof x)
@@ -190,6 +190,8 @@ object(self)
   method each = self#iter
   method each_with_index = self#iteri
   method map f = self#cloneset (List.map f record_list)
+  method fold_left : 'a. ('a -> record -> 'a) -> 'a -> 'a =
+    (fun f acc -> List.fold_left f acc record_list)
   (* Transformation *)
   method keep_if f = 
     record_list <- (List.filter f record_list);
