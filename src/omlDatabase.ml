@@ -1,296 +1,322 @@
-module AbstractDB : sig
+(*
+  Ce module permet de traiter des bases de données embarquées
+  (au moyen de fichiers) pour des applications ne pouvant pas 
+  se connecter à un serveur pour les besoins de l'application.
+*)
 
-  exception Type_error
-  exception Uknown_field
-  exception Table_already_created
-  exception Uknown_table
-  exception No_record
+(* Description des exceptions *)
+exception Type_error
+exception Uknown_database of string
+exception Uknown_table of string
+exception Uknown_field of string
 
-  type field_header = [
-    `Int 
-  | `Float 
-  | `Char
-  | `Bool
-  | `String 
-  ]
-  
-  type field = [
-    `Int of int 
-  | `Float of float 
-  | `Char of char 
-  | `Bool of bool 
-  | `String of string 
-  ] 
-    
-  type database
-  type record
-  type table
-    
-  val int : field_header
-  val char : field_header
-  val string : field_header
-  val float : field_header
-  val bool : field_header
+(* Description des éléments relatifs aux champs *)
+type field_type = [
+  `Int 
+| `Float 
+| `Bool 
+| `Char 
+| `String 
+] 
+type field_header =
+  (string * field_type)
 
-  val to_int : int -> field 
-  val to_char : char -> field
-  val to_float : float -> field 
-  val to_string : string -> field 
-  val to_bool : bool -> field 
+type abstract_field = [
+  `Int of int 
+| `Float of float 
+| `Bool of bool
+| `Char of char 
+| `String of string
+]
 
-  val of_int : field -> int 
-  val of_float : field -> float
-  val of_char : field -> char
-  val of_bool : field -> bool 
-  val of_string : field -> string 
+(* Représentation d'un champ d'enregistrement *)
+class field(field_in) = 
+object(self) 
+  val mutable attr_value : abstract_field = field_in
+  (* Information de typage *)
+  method private field_image : field_type = match attr_value with 
+  | `Int _     -> `Int 
+  | `Float _   -> `Float 
+  | `Bool _    -> `Bool
+  | `Char _    -> `Char
+  | `String _  -> `String
+  method is_int    = self#field_image = `Int
+  method is_float  = self#field_image = `Float
+  method is_bool   = self#field_image = `Bool
+  method is_char   = self#field_image = `Char
+  method is_string = self#field_image = `String
+  method check_image hd = self#field_image = hd
+  (* outil de conversion *)
+  (* Entiers *)
+  method private iof = int_of_float
+  method private ioc = int_of_char 
+  method private iob x = if x then 1 else 0
+  method private ios = int_of_string
+  (* Floats *)
+  method private foi = float_of_int
+  method private foc x = self#foi(self#ioc x)
+  method private fob x = if x then 1. else 0.
+  method private fos = float_of_string
+  (* Bools *)
+  method private boi x = not (x = 0)
+  method private bof x = not (x = 0.)
+  method private boc x = not (x = '0')
+  method private bos x = not (String.lowercase x = "false" || x = "0")
+  (* Char *)
+  method private coi = char_of_int
+  method private cof x = self#coi(self#iof x)
+  method private cob x = if x then '1' else '0'
+  method private cos x = 
+    if (String.length x) >= 0 
+    then x.[0] 
+    else '0'
+  (* String *)
+  method private soi = string_of_int
+  method private sof = string_of_float
+  method private sob x = if x then "true" else "false"
+  method private soc = String.make 1
 
-
-  val create : string -> database
-  val load : string -> database 
-  val create_table : database -> string -> (string * field_header) list -> table
-  val create_record : database -> table -> field list -> record
-  val table_exists : database -> string -> bool
-  val table_length : table -> int
-  val field  : record -> string -> field
-  val values : record -> field list
-  val ids : record -> string list
-  val zip_values : record -> (string * field) list
-  val records : table -> record list
-  val query : (record -> bool) -> table -> record list
-  val find_one : (record -> bool) -> table -> record
-  val max : table -> string -> record
-  val min : table -> string -> record  
-  val delete_if : database -> table -> (record -> bool) -> table 
-  val keep_if : database -> table -> (record -> bool) -> table
-  val drop_table : database -> table -> table
-  val remove_table : database -> table -> unit  
-  val get_table : database -> string -> table
-  val get_last : table -> record
-  val get_last_field : table -> string -> field
-
-end = struct
-
-  exception Type_error
-  exception Uknown_field
-  exception Table_already_created
-  exception Uknown_table
-  exception No_record
-
-  type field_header = [
-    `Int 
-  | `Float 
-  | `Char
-  | `Bool 
-  | `String 
-  ]
-
-  
-  type field = [
-    `Int of int 
-  | `Float of float 
-  | `Char of char 
-  | `Bool of bool 
-  | `String of string 
-  ] 
-
-  type record = {
-    table_header : (string * field_header) list;
-    values : field list
-  }
-
-  type table = {
-    name : string; 
-    header : (string * field_header) list;
-    mutable size : int; 
-    mutable entries : record list
-  }
-
-  type database = {
-    file : string;
-    mutable tables : table list
-  }
-
-  let dump_db record = 
-    let flags = [Open_wronly;Open_creat;Open_trunc] in
-    let chan = open_out_gen flags 0o777 record.file in 
-    Marshal.to_channel chan record [];
-    close_out chan
-
-  let int      = `Int
-  let char     = `Char 
-  let float    = `Float 
-  let bool     = `Bool 
-  let string   = `String 
-
-  let to_int x    = `Int x
-  let to_char x   = `Char x
-  let to_float x  = `Float x 
-  let to_bool x   = `Bool x
-  let to_string x = `String x 
-
-  let of_int = function 
-    | `Int x -> x 
-    | _ -> raise Type_error 
-
-
-  let of_char = function 
-    | `Char x -> x 
+  (* Conversions explicite *)
+  method int = 
+    match attr_value with 
+    | `Int x -> x
+    | `Float x -> self#iof x
+    | `Char x -> self#ioc x
+    | `Bool x -> self#iob x 
+    | `String x -> self#ios x
     | _ -> raise Type_error
-
-  let of_float = function 
-    | `Float x -> x 
+  method float = 
+    match attr_value with 
+    | `Int x -> self#foi x
+    | `Float x -> x
+    | `Char x -> self#foc x
+    | `Bool x -> self#fob x 
+    | `String x -> self#fos x
     | _ -> raise Type_error
-
-
-  let of_bool = function 
+  method char = 
+    match attr_value with 
+    | `Int x -> self#coi x
+    | `Float x -> self#cof x
+    | `Char x -> x
+    | `Bool x -> self#cob x 
+    | `String x -> self#cos x
+    | _ -> raise Type_error
+  method bool = 
+    match attr_value with 
+    | `Int x -> self#boi x
+    | `Float x -> self#bof x
+    | `Char x -> self#boc x
     | `Bool x -> x 
+    | `String x -> self#bos x
     | _ -> raise Type_error
-
-
-  let of_string = function 
-    | `String x -> x 
+  method string = 
+    match attr_value with 
+    | `Int x -> self#soi x
+    | `Float x -> self#sof x
+    | `Char x -> self#soc x
+    | `Bool x -> self#sob x 
+    | `String x -> x
     | _ -> raise Type_error
-
-
-  let rec check_image = function 
-    | [], [] -> ()
-    | (_, `Int) :: xs, (`Int _) :: ys 
-    | (_, `Float) :: xs, (`Float _) :: ys
-    | (_, `Bool) :: xs, (`Bool _) :: ys
-    | (_, `Char) :: xs, (`Char _) :: ys
-    | (_, `String) :: xs, (`String _) :: ys
-      -> check_image (xs, ys)
-    | _ -> raise Type_error
-
-  let table_exists db name = 
-    let filter = List.filter (fun table -> table.name = name) db.tables 
-    in List.length filter > 0
-
-  let create_table db name header =  
-    if (table_exists db name) then 
-      raise Table_already_created
-    else begin 
-      let record = {
-	name = name;
-	size = 0; 
-	header = header;
-	entries = []
-      } in
-      db.tables <- record :: db.tables;
-      dump_db db;
-      record
-    end
-
-  let table_length table = table.size
-
-  let create_record db table values =
-    check_image (table.header, values); 
-    let record = {
-      table_header = table.header;
-      values = values
-    } in 
-    table.size <- table.size + 1;
-    table.entries <- record :: table.entries;
-    dump_db db;
-    record
-
-  let ids r = 
-    List.map begin 
-      fun x -> fst x
-    end r.table_header
  
-  let values r = r.values
-  let zip_values r = 
-    let rec aux acc = function 
-      | x :: xs, y :: ys -> aux ((x, y)::acc) (xs, ys)
-      | [], _ | _, [] ->  acc 
-    in aux [] (ids r, values r)
-
-  let field r name = 
-    let rec aux = function 
-      | x :: _ , y :: _ when x = name -> y
-      | _ :: x , _ :: y -> aux (x, y)
-      | [], _ | _, [] -> raise Uknown_field
-    in aux (ids r, values r)
-
-  let records t = t.entries
-  let query f table =  List.filter f table.entries
-  let find_one f table =
-    let sub = query f table in 
-    if List.length sub > 0 then 
-      List.hd sub 
-    else raise No_record
-
-  let max table f  = 
-    let sub = records table in 
-    List.hd (List.sort (
-      fun a b -> compare (field a f) (field b f)
-    ) sub)
-
-  
-  let min table f  = 
-    let sub = records table 
-    and len = table.size in
-    List.hd (List.sort (
-      fun a b -> len - (compare (field a f) (field b f))
-    ) sub)
-
-  let sort table f = 
-    List.sort f (records table)
-
-  let keep_if db table f =
-    let sub = List.filter f table.entries in 
-    let len = List.length sub in 
-    table.entries <- sub;
-    table.size <- len;
-    dump_db db; 
-    table
-
-  let delete_if db table f = 
-    let inv f x = not (f x) in 
-    keep_if db table (inv f)
-
-  let create file = 
-    let record = {
-      file = file; 
-      tables = []
-    } in 
-    dump_db record;
-    record
-
-  let load file = 
-    let chan = Pervasives.open_in file in 
-    Marshal.from_channel chan
-
-  let get_table db name = 
-    if not (table_exists db name)
-    then raise Uknown_table 
-    else begin 
-      let f = List.filter (fun x -> x.name = name) db.tables in 
-      List.hd f
-    end 
-
-  let drop_table db table = 
-    table.entries <- [];
-    table.size <- 0;
-    dump_db db; 
-    table
-
-  let remove_table db table = 
-    db.tables <- begin 
-      List.filter (fun x -> x.name != table.name) db.tables
-    end;
-    dump_db db 
-
-    let get_last table = 
-      if table.size = 0 then 
-	raise No_record 
-      else (List.hd table.entries)
-
-
-  let get_last_field table name = 
-    field (get_last table) name
-
+  (* Accesseur *)
+  method value = attr_value
 end
 
-include AbstractDB
+(* Représentation d'un enregistrement *) 
+class record(proto_in, values_in) = 
+object(self)
+  val prototypes : field_header list =  proto_in
+  val mutable attr_values : field list    = values_in
+  initializer (self#check_image)
+  (* Vérifie la fiabilité d'un champ *)
+  method private check_image = 
+    let rec check = function 
+      | [], [] -> ()
+      | (_,x)::xs, y::ys when y#check_image x -> check(xs, ys)
+      | _ -> raise Type_error
+    in check (prototypes, attr_values)
+  (* Accès aux valeurs des champ *)
+  method labels = List.map (fun x -> fst x) prototypes
+  method values = attr_values
+  method values_with_labels = 
+    List.combine (self#labels) attr_values
+  method field label =
+    try List.assoc label (self#values_with_labels)
+    with 
+    | Not_found -> raise (Uknown_field label)
+  method get_prototypes = prototypes
+  method get_prototype label = 
+    List.find (fun x -> (fst x) = label) prototypes
+end
+
+(* Représentation d'un ensemble de réponses **)
+class subset(proto_in, components) = 
+object(self)
+  val prototypes : field_header list = proto_in
+  val mutable record_list : record list = components
+  val mutable size = List.length components
+  method private cloneset l = new subset(prototypes, l)
+ 
+ (* Accès aux données *)
+  method with_fields fields = 
+    let rec filter_values r proto values = function 
+      | [] -> new record(proto, values)
+      | x::xs -> 
+	let nproto = (r#get_prototype x)::proto
+	and nvalue = (r#field x)::values in 
+	filter_values r nproto nvalue xs
+    in 
+    let prototypes' = 
+      List.filter (fun x -> List.mem (fst x) fields) prototypes in 
+    let filter r = filter_values r [] [] fields in 
+    let sublist = List.map (filter) record_list in 
+    new subset(prototypes', sublist)
+
+  method get_prototypes = prototypes
+  method records = record_list
+  method last    = List.hd record_list
+  method first   = List.hd (List.rev record_list)
+  method find  f = List.find f record_list
+  method count   = size
+  method count_where f = (self#query f)#count
+  method sort_with f  = 
+    self#cloneset (List.sort f record_list)
+  method query f = 
+    self#cloneset (List.find_all f record_list)
+  method to_subset = self#cloneset record_list
+  (* Itération *)
+  method iter f  = List.iter f record_list
+  method iteri f = List.iteri f record_list
+  method each = self#iter
+  method each_with_index = self#iteri
+  method map f = self#cloneset (List.map f record_list)
+  method fold_left : 'a. ('a -> record -> 'a) -> 'a -> 'a =
+    (fun f acc -> List.fold_left f acc record_list)
+  method fold_right : 'a. (record -> 'a -> 'a) -> 'a -> 'a =
+    (fun f acc -> List.fold_right f record_list acc)
+  (* Transformation *)
+  method keep_if f = 
+    record_list <- (List.filter f record_list);
+    size <- List.length record_list
+  method delete_if f = 
+    let inverse x = not (f x) in 
+    self#keep_if inverse 
+  method drop = 
+    record_list <- [];
+    size <- 0
+  method insert obj = 
+    record_list <- obj :: record_list; 
+    size <- succ size
+end 
+
+(* Représentation d'une table *)
+class table(name_in, proto_in) =
+object(self)
+  inherit subset(proto_in, [])
+  val view_name : string = name_in 
+  method name = view_name
+end
+
+(* Représentation d'une base de données *)
+class database(file_in) =
+object(self)  
+  val file : string = file_in
+  val mutable table_list : table list = []
+  val flags = [
+    Pervasives.Open_trunc;
+    Pervasives.Open_creat;
+    Pervasives.Open_wronly
+  ]
+  (* Initialisation de la base de données *) 
+  initializer
+    self#init_file
+  method private init_file = 
+    let chan =
+      Pervasives.open_out_gen flags 0o777 file
+    in Pervasives.close_out chan
+  (* Création d'une table (dans la base de données) *)
+  method tables = table_list
+  method get_table name = 
+    try List.find (fun x -> x#name = name) table_list
+    with 
+    | Not_found -> raise (Uknown_table name)
+  method create_table name prototypes =
+    table_list <- (new table (name, prototypes)) :: table_list;
+    self#dump
+  method append_table table = 
+    table_list <- table :: table_list;
+    self#dump
+  method table_exists name = 
+    try 
+      ignore (List.find (fun x -> x#name = name) table_list);
+      true 
+    with 
+    | _ -> false
+
+  (* Sauvegarde de la base de données  *)
+  method dump = 
+    let chan = open_out file in 
+    Marshal.to_channel chan self [];
+    close_out chan
+  method backup = self#dump
+  method save = self#dump
+
+  (* 
+     Traitement "paranoïaque" des requêtes.
+     Sauvegarde automatiquement la base de données 
+     a chaque modification des tables
+  *)
+  method delete_if table_name f = 
+    (self#get_table table_name)#delete_if f;
+    self#dump
+  method keep_if table_name f = 
+    (self#get_table table_name)#keep_if f; 
+    self#dump
+  method insert table_name values = 
+    let t = self#get_table table_name in 
+    let r = new record(t#get_prototypes, values) in
+    t#insert r;
+    self#dump
+  method append_record table_name record = 
+    (self#get_table table_name)#insert record
+  method drop table_name = 
+    (self#get_table table_name)#drop;
+    self#dump
+end
+  
+(* Api de conversion *) 
+let int id = (id, `Int)
+let float id = (id, `Float) 
+let bool id = (id, `Bool)
+let char id = (id, `Char)
+let string id = (id, `String)
+
+let to_int x = `Int x 
+let to_bool x = `Bool x 
+let to_float x = `Float x
+let to_char x = `Char x 
+let to_string x = `String x
+
+(*
+  API générale de l'application.
+  Point d'entrée de l'outil.
+*)
+let load file =
+  try 
+    let channel = open_in file in 
+    let db : database = Marshal.from_channel channel in 
+    close_in channel; 
+    db
+  with 
+    _ -> raise (Uknown_database file)
+
+let create file = new database(file)
+let create_table name proto = new table(name, proto)
+let create_record proto values = new record (proto, values)
+  
+(*
+  Cette fonction ne vérifie pas l'existence propre d'une DB. 
+  Un fichier n'étant pas une base de données sera considéré 
+  comme une base de données valide.
+*)
+let database_exists = Sys.file_exists
