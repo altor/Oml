@@ -1,2 +1,2 @@
 #Oml.Database
-Module en court de réécriture (pour plus de modernité)
+Module en cours de réécriture (pour plus de modernité)
