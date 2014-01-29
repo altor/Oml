@@ -6,9 +6,9 @@
 
 (* Description des exceptions *)
 exception Type_error
-exception Uknown_database of string
-exception Uknown_table of string
-exception Uknown_field of string
+exception Unkwown_database of string
+exception Unkwown_table of string
+exception Unkwown_field of string
 
 (* Description des éléments relatifs aux champs *)
 type field_type = [
@@ -143,7 +143,7 @@ object(self)
   method field label =
     try List.assoc label (self#values_with_labels)
     with 
-    | Not_found -> raise (Uknown_field label)
+    | Not_found -> raise (Unkwown_field label)
   method get_prototypes = prototypes
   method get_prototype label = 
     List.find (fun x -> (fst x) = label) prototypes
@@ -231,7 +231,7 @@ object(self)
   method get_table name = 
     try List.find (fun x -> x#name = name) table_list
     with 
-    | Not_found -> raise (Uknown_table name)
+    | Not_found -> raise (Unkwown_table name)
   method create_table name prototypes =
     table_list <- (new table (name, prototypes)) :: table_list;
     self#dump
@@ -300,7 +300,7 @@ let load file =
     close_in channel; 
     db
   with 
-    _ -> raise (Uknown_database file)
+    _ -> raise (Unkwown_database file)
 
 let create file = new database(file)
 let create_table name proto = new table(name, proto)
