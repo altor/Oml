@@ -29,6 +29,22 @@ type abstract_field = [
 | `String of string
 ]
 
+(* Purification des données à sauvegarder *)
+type pure_field = abstract_field
+type pure_record = {
+  record_header : field_header list; 
+  record_values : pure_field list;
+}
+type pure_table = {
+  table_name : string;
+  table_header : field_header list;
+  record_list : pure_record list
+}
+type pure_database = {
+  database_file : string;
+  database_table_list : pure_table list
+}
+
 (* Représentation d'un champ d'enregistrement *)
 class field(field_in) = 
 object(self) 
@@ -120,6 +136,7 @@ object(self)
  
   (* Accesseur *)
   method value = attr_value
+  method purify:abstract_field = self#value
 end
 
 (* Représentation d'un enregistrement *) 
@@ -147,6 +164,10 @@ object(self)
   method get_prototypes = prototypes
   method get_prototype label = 
     List.find (fun x -> (fst x) = label) prototypes
+  method purify = {
+    record_header = prototypes;
+    record_values = List.map (fun x -> x#purify) attr_values
+  }
 end
 
 (* Représentation d'un ensemble de réponses **)
@@ -215,6 +236,15 @@ object(self)
   inherit subset(proto_in, [])
   val view_name : string = name_in 
   method name = view_name
+  method purify = {
+    table_name = view_name;
+    table_header = prototypes;
+    record_list = List.map (fun x -> x#purify) record_list
+  }
+  method overkill_transform v =
+    record_list <- v;
+    size <- List.length record_list
+    
 end
 
 (* Représentation d'une base de données *)
@@ -238,6 +268,9 @@ object(self)
   method append_table table = 
     table_list <- table :: table_list;
     self#dump
+  method append_tables tables = 
+    table_list <- tables @ table_list;
+    self#dump
   method table_exists name = 
     try 
       ignore (List.find (fun x -> x#name = name) table_list);
@@ -248,7 +281,7 @@ object(self)
   (* Sauvegarde de la base de données  *)
   method dump = 
     let chan = open_out_gen flags 0o777 file in 
-    Marshal.to_channel chan self [Marshal.Closures];
+    Marshal.to_channel chan self#purify [Marshal.Closures];
     close_out chan
   method backup = self#dump
   method save = self#dump
@@ -274,7 +307,33 @@ object(self)
   method drop table_name = 
     (self#get_table table_name)#drop;
     self#dump
+  (* Routine de purification *)
+  method purify = {
+    database_file = file;
+    database_table_list = List.map (fun x -> x#purify) table_list
+  }
 end
+
+(* Conversion d'une base de données en pure en objet *)
+let unpurify_field f = new field(f)
+let unpurify_record f = 
+  new record begin
+    f.record_header, 
+    List.map (fun x -> unpurify_field x) f.record_values
+  end
+let unpurify_table f = 
+  let tbl = new table(f.table_name, f.table_header) in 
+  let nonpurerecords = 
+    List.map (fun x -> unpurify_record x) f.record_list
+  in tbl#overkill_transform nonpurerecords; 
+  tbl
+let unpurify_db f =
+  let db = new database(f.database_file) in
+  let tb = List.map begin
+    fun x -> unpurify_table x
+  end f.database_table_list in
+  db#append_tables tb;
+  db
   
 (* Api de conversion *) 
 let int id = (id, `Int)
@@ -296,9 +355,9 @@ let to_string x = `String x
 let load file =
   try 
     let channel = open_in file in 
-    let db : database = Marshal.from_channel channel in 
+    let db : pure_database = Marshal.from_channel channel in 
     close_in channel; 
-    db
+    unpurify_db db
   with 
     _ -> raise (Unkwown_database file)
 
