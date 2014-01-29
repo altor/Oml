@@ -1,11 +1,11 @@
 all : toplevel
 
-libc : 
-	echo "Compilation de la bibliothèque C"
+libc :
+	@echo "\n======  Compilation de la bibliothèque C  ======\n"
 	gcc -I /usr/local/lib/ocaml/ -c src/oml.c -o oml.o
 
 base : libc
-	echo "Construction des librairies de base"
+	@echo "\n======  Construction des librairies de base  ======\n"
 	ocamlc -o omlMonad.cmo -c src/omlMonad.ml
 	ocamlc -custom -o omlPoly.cmo -I ../ -c oml.o src/omlPoly.ml
 	ocamlc -o omlIO.cmo -I ../ -c str.cma omlPoly.cmo  src/omlIO.ml
@@ -24,17 +24,17 @@ base : libc
 
 lib : base
 
-	echo "Construction de la librairie générale"
+	@echo "\n======  Construction de la librairie générale  ======\n"
 	ocamlc -custom -o oml.cmo -I ../ -c oml.o omlMonad.cmo omlPoly.cmo omlIO.cmo  omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  src/oml.ml
 
 	ocamlc -o oml.cma -a unix.cma str.cma omlMonad.cmo omlPoly.cmo omlIO.cmo omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  oml.cmo 
 
 toplevel : lib 
-	echo "Construction du toplevel"
+	@echo "\n======  Construction du toplevel  ======\n"
 	ocamlmktop -custom -o ocamloml oml.o oml.cma
 
 clean : 
-	echo "Suppression des fichiers"
+	@echo "\n======  Suppression des fichiers  ======\n"
 	rm -f *.cm* 
 	rm -f *.o
 	rm -f ocamloml

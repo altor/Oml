@@ -100,7 +100,6 @@ object(self)
     | `Char x -> self#ioc x
     | `Bool x -> self#iob x 
     | `String x -> self#ios x
-    | _ -> raise Type_error
   method float = 
     match attr_value with 
     | `Int x -> self#foi x
@@ -108,7 +107,6 @@ object(self)
     | `Char x -> self#foc x
     | `Bool x -> self#fob x 
     | `String x -> self#fos x
-    | _ -> raise Type_error
   method char = 
     match attr_value with 
     | `Int x -> self#coi x
@@ -116,7 +114,6 @@ object(self)
     | `Char x -> x
     | `Bool x -> self#cob x 
     | `String x -> self#cos x
-    | _ -> raise Type_error
   method bool = 
     match attr_value with 
     | `Int x -> self#boi x
@@ -124,7 +121,6 @@ object(self)
     | `Char x -> self#boc x
     | `Bool x -> x 
     | `String x -> self#bos x
-    | _ -> raise Type_error
   method string = 
     match attr_value with 
     | `Int x -> self#soi x
@@ -132,7 +128,6 @@ object(self)
     | `Char x -> self#soc x
     | `Bool x -> self#sob x 
     | `String x -> x
-    | _ -> raise Type_error
  
   (* Accesseur *)
   method value = attr_value
@@ -342,11 +337,11 @@ let bool id = (id, `Bool)
 let char id = (id, `Char)
 let string id = (id, `String)
 
-let to_int x = `Int x 
-let to_bool x = `Bool x 
-let to_float x = `Float x
-let to_char x = `Char x 
-let to_string x = `String x
+let to_int x = new field(`Int x) 
+let to_bool x = new field(`Bool x) 
+let to_float x = new field(`Float x)
+let to_char x = new field(`Char x) 
+let to_string x = new field(`String x)
 
 (*
   API générale de l'application.
