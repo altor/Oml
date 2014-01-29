@@ -227,14 +227,6 @@ object(self)
     Pervasives.Open_creat;
     Pervasives.Open_wronly
   ]
-  (* Initialisation de la base de données *) 
-  initializer
-    self#init_file
-  method private init_file = 
-    let chan =
-      Pervasives.open_out_gen flags 0o777 file
-    in Pervasives.close_out chan
-  (* Création d'une table (dans la base de données) *)
   method tables = table_list
   method get_table name = 
     try List.find (fun x -> x#name = name) table_list
@@ -255,8 +247,8 @@ object(self)
 
   (* Sauvegarde de la base de données  *)
   method dump = 
-    let chan = open_out file in 
-    Marshal.to_channel chan self [];
+    let chan = open_out_gen flags 0o777 file in 
+    Marshal.to_channel chan self [Marshal.Closures];
     close_out chan
   method backup = self#dump
   method save = self#dump
