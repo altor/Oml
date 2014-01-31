@@ -1,4 +1,4 @@
-all : toplevel
+all : dbinspector
 
 libc :
 	@echo "\n======  Compilation de la bibliothèque C  ======\n"
@@ -8,7 +8,7 @@ base : libc
 	@echo "\n======  Construction des librairies de base  ======\n"
 	ocamlc -o omlMonad.cmo -c src/omlMonad.ml
 	ocamlc -custom -o omlPoly.cmo -I ../ -c oml.o src/omlPoly.ml
-	ocamlc -o omlIO.cmo -I ../ -c str.cma omlPoly.cmo  src/omlIO.ml
+	ocamlc -o omlIO.cmo -I ../ -c unix.cma str.cma omlPoly.cmo  src/omlIO.ml
 	ocamlc -o omlEnum.cmo -I ../ -c omlMonad.cmo src/omlEnum.ml
 	ocamlc -o omlList.cmo -I ../ -c omlEnum.cmo src/omlList.ml
 	ocamlc -o omlArray.cmo -I ../ -c omlEnum.cmo src/omlArray.ml
@@ -20,18 +20,24 @@ base : libc
 	ocamlc -o omlChar.cmo -I ../ -c omlNumeric.cmo src/omlChar.ml
 	ocamlc -o omlFile.cmo -I ../ -c omlIO.cmo src/omlFile.ml
 	ocamlc -o omlMarshal.cmo -c src/omlMarshal.ml
+	ocamlc -o omlDate.cmo -c unix.cma src/omlDate.ml
 	ocamlc -o omlDatabase.cmo -c src/omlDatabase.ml
 
 lib : base
 
 	@echo "\n======  Construction de la librairie générale  ======\n"
-	ocamlc -custom -o oml.cmo -I ../ -c oml.o omlMonad.cmo omlPoly.cmo omlIO.cmo  omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  src/oml.ml
+	ocamlc -custom -o oml.cmo -I ../ -c oml.o omlMonad.cmo omlPoly.cmo omlIO.cmo  omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDate.cmo omlDatabase.cmo  src/oml.ml
 
-	ocamlc -o oml.cma -a unix.cma str.cma omlMonad.cmo omlPoly.cmo omlIO.cmo omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDatabase.cmo  oml.cmo 
+	ocamlc -o oml.cma -a unix.cma str.cma omlMonad.cmo omlPoly.cmo omlIO.cmo omlEnum.cmo omlList.cmo omlArray.cmo omlString.cmo omlBool.cmo omlInt.cmo omlFloat.cmo omlChar.cmo omlFile.cmo omlMarshal.cmo omlDate.cmo omlDatabase.cmo  oml.cmo 
 
 toplevel : lib 
 	@echo "\n======  Construction du toplevel  ======\n"
 	ocamlmktop -custom -o ocamloml oml.o oml.cma
+
+dbinspector : toplevel
+	@echo "\n======  Construction du DBInspect  ======\n"
+	ocamlc -custom -o omlDBInspector.cmo -I ../ -c oml.o oml.cma src/omlDBInspector.ml
+	ocamlc -custom -o ocamlomldb oml.o oml.cma omlDBInspector.cmo  
 
 clean : 
 	@echo "\n======  Suppression des fichiers  ======\n"
